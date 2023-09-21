@@ -27,6 +27,8 @@ const App = () => {
     const [filteredActivities, setFilteredActivities] = useState([]);
     const [currentStep, setCurrentStep] = useState('loading'); // Manage the current step
     const [selectedSchedule, setSelectedSchedule] = useState(null);
+    const [itemId, setItemId] = useState('')
+
 
     const filterAndSetActivities = async () => {
         try {
@@ -44,11 +46,14 @@ const App = () => {
     };
 
     const updateActivity = async () => {
+        // console.log(photoURL,progress)
         try {
-            await axios.put(`${BASE_URL}/update/${selectedSchedule._id}`, {
-                progress: parseInt(progress),
+            const id = itemId
+            console.log('a', id)
+            await axios.put(`${BASE_URL}/update/${id}`, {
+                progress,
                 photoURL,
-                comments: comments.split('\n'),
+                comments,
             });
 
             // Reset the form fields after successful update
@@ -173,6 +178,7 @@ const App = () => {
                         </View>
                     </View>
                     <Button title="Add Activity" onPress={addActivity} />
+                    <Button title="Show Assignment" onPress={fetchActivities} />
                     <Button title="Show Filters" onPress={() => setCurrentStep('filters')} />
                 </View>
             )}
@@ -200,7 +206,8 @@ const App = () => {
                             />
                         </View>
                     </View>
-                    <Button title="Filter Activities" onPress={filterAndSetActivities} />
+                    <Button title="Filter Result" onPress={filterAndSetActivities} />
+                    <Button title="Show Assignment" onPress={fetchActivities} />
                     <Button title="Show Form" onPress={() => setCurrentStep('form')} />
                 </View>
             )}
@@ -211,34 +218,41 @@ const App = () => {
                     <FlatList
                         data={activities}
                         keyExtractor={(item) => item._id}
+                        numColumns={3}
+                        contentContainerStyle={styles.gridContainer}
                         renderItem={({ item }) => (
-                            <View style={styles.activityItem}>
-                                <Text>Activity Name: {item.activityName}</Text>
-                                <Text>Start Date: {item.startDate}</Text>
-                                <Text>End Date: {item.endDate}</Text>
-                                <Text>Description: {item.description}</Text>
-                                <Text>Assigned To: {item.assignedTo}</Text>
-                                {item.photoURL && (
-                                    <Image source={{ uri: item.photoURL }} style={{ width: 200, height: 200 }} />
-                                )}
-                                <Text>Progress: {item.progress}%</Text>
-                                <Text>Comments:</Text>
-                                {item.comments.map((comment, index) => (
-                                    <Text key={index}>{comment}</Text>
-                                ))}
-                                <Button
-                                    title="Submit Assignment"
-                                    onPress={() => {
-                                        setSelectedSchedule(item);
-                                        setPhotoURL(item.photoURL);
-                                        setProgress(item.progress.toString());
-                                        setComments(item.comments.join('\n'));
-                                        setCurrentStep('update');
-                                    }}
-                                />
+                            <View style={styles.gridContainer}>
+                                <View style={styles.gridItem}>
+                                    <Text>Activity Name: {item.activityName}</Text>
+                                    <Text>Start Date: {item.startDate}</Text>
+                                    <Text>End Date: {item.endDate}</Text>
+                                    <Text>Description: {item.description}</Text>
+                                    <Text>Assigned To: {item.assignedTo}</Text>
+                                    {item.photoURL && (
+                                        <Image source={{ uri: item.photoURL }} style={{ width: '100%', height: 200 }} />
+                                    )}
+                                    <Text>Progress: {item.progress}%</Text>
+                                    <Text>Comments:</Text>
+                                    {item.comments.map((comment, index) => (
+                                        <Text key={index}>{comment}</Text>
+                                    ))}
+                                    <Button
+                                        title="Submit Assignment"
+                                        onPress={() => {
+                                            setSelectedSchedule(item);
+                                            setPhotoURL(item.photoURL);
+                                            setProgress(item.progress.toString());
+                                            setComments(item.comments.join('\n'));
+                                            setItemId(item._id);
+                                            setCurrentStep('update');
+                                            console.log(item._id)
+                                        }}
+                                    />
+                                </View>
                             </View>
                         )}
                     />
+                    <Button title="Show Filters" onPress={() => setCurrentStep('filters')} />
                     <Button title="Show Form" onPress={() => setCurrentStep('form')} />
                 </View>
             )}
@@ -264,9 +278,22 @@ const App = () => {
                                 {item.comments.map((comment, index) => (
                                     <Text key={index}>{comment}</Text>
                                 ))}
+                                <Button
+                                    title="Submit Assignment"
+                                    onPress={() => {
+                                        setSelectedSchedule(item);
+                                        setPhotoURL(item.photoURL);
+                                        setProgress(item.progress.toString());
+                                        setComments(item.comments.join('\n'));
+                                        setItemId(item._id);
+                                        setCurrentStep('update');
+                                        console.log(item._id)
+                                    }}
+                                />
                             </View>
                         )}
                     />
+
                     <Button title="Show Filters" onPress={() => setCurrentStep('filters')} />
                 </View>
             )}
@@ -298,7 +325,7 @@ const App = () => {
                         multiline
                     />
                     <Button title="Submit Update" onPress={updateActivity} />
-                    <Button title="Show Grid" onPress={() => setCurrentStep('grid')} />
+                    {/* <Button title="Show Grid" onPress={() => setCurrentStep('grid')} /> */}
                 </View>
             )}
         </ScrollView>
@@ -343,6 +370,38 @@ const styles = StyleSheet.create({
         padding: 10,
         marginBottom: 10,
     },
+
+    // Inside your StyleSheet.create
+
+    // Inside your StyleSheet.create
+    // Inside your StyleSheet.create
+    gridContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
+        marginHorizontal: 5, // To account for the margins of grid items
+        gap:10,
+    },
+    gridItem: {
+        width: '100%', // Adjust the width as needed to fit 3 columns in a row
+        margin: 5, // Add some margin to separate grid items
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 5,
+        marginHorizontal: 30,
+        padding: 20,
+    },
+    gridItemImage: {
+        width: '100%', // Make the image width 100% of the grid item
+        height: 'auto', // Allow the height to adjust automatically to maintain aspect ratio
+        marginBottom: 10, // Add margin to separate the image from other content
+    },
+
+
+
+    // Add more styles as needed
 });
+
 
 export default App;
