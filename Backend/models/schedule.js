@@ -18,7 +18,7 @@ const scheduleSchema = new mongoose.Schema({
     required: true,
   },
   assignedTo: {
-    type: String,
+    type: String,                           
     required: true,
   },
   progress: {

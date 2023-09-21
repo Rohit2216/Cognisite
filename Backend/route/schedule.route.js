@@ -91,6 +91,7 @@ ScheduleRouter.post("/schedules/filter", async (req, res) => {
 ScheduleRouter.put("/update/:activityId", async (req, res) => {
   const { activityId } = req.params;
   const { progress, photoURL, comments } = req.body;
+  console.log(activityId)
 
   try {
     // Find the activity by activityId
@@ -102,7 +103,7 @@ ScheduleRouter.put("/update/:activityId", async (req, res) => {
 
     // Update the activity fields
     if (progress !== undefined) {
-      activity.progress = progress;
+      activity.progress = parseInt(progress);
     }
 
     if (photoURL) {
