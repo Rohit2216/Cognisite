@@ -29,15 +29,9 @@ const scheduleSchema = new mongoose.Schema({
     type: String,
     default: null, // You can store the URL to the attached photo here
   },
-  comments: [
-    {
-      text: String,
-      date: {
-        type: Date,
-        default: Date.now,
-      },
-    },
-  ],
+  comments: [{
+    type: String,
+  }]
 });
 
 const Schedule = mongoose.model('Schedule', scheduleSchema);

@@ -88,7 +88,7 @@ ScheduleRouter.post("/schedules/filter", async (req, res) => {
 
 
 
-ScheduleRouter.put("/schedules/:activityId", async (req, res) => {
+ScheduleRouter.put("/update/:activityId", async (req, res) => {
   const { activityId } = req.params;
   const { progress, photoURL, comments } = req.body;
 
@@ -110,7 +110,7 @@ ScheduleRouter.put("/schedules/:activityId", async (req, res) => {
     }
 
     if (comments) {
-      activity.commentss.push(comments);
+      activity.comments.push(comments);
     }
 
     // Save the updated activity
@@ -118,9 +118,11 @@ ScheduleRouter.put("/schedules/:activityId", async (req, res) => {
 
     res.status(200).json({ message: "Activity updated successfully" });
   } catch (error) {
+    console.error('Error updating activity:', error); // Log the error to the console
     res.status(500).json({ message: "An error occurred while updating the activity" });
   }
 });
+
 
 
 
