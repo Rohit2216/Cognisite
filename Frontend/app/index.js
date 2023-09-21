@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:8000/sch'; // Replace with your backend server URL
+const BASE_URL = 'https://cognisite-lot4.onrender.com/sch/'; 
 
 const App = () => {
     const [activityName, setActivityName] = useState('');
@@ -25,7 +25,7 @@ const App = () => {
     const [comments, setComments] = useState('');
     const [activities, setActivities] = useState([]);
     const [filteredActivities, setFilteredActivities] = useState([]);
-    const [currentStep, setCurrentStep] = useState('loading'); // Manage the current step
+    const [currentStep, setCurrentStep] = useState('loading');
     const [selectedSchedule, setSelectedSchedule] = useState(null);
     const [itemId, setItemId] = useState('')
 
@@ -38,7 +38,7 @@ const App = () => {
             });
 
             setFilteredActivities(response.data);
-            setCurrentStep('filteredData'); // Switch to the filtered data view
+            setCurrentStep('filteredData'); 
         } catch (error) {
             console.error('Error filtering activities:', error);
             Alert.alert('Error', 'Failed to filter activities');
@@ -56,12 +56,9 @@ const App = () => {
                 comments,
             });
 
-            // Reset the form fields after successful update
             setPhotoURL('');
             setProgress(0);
             setComments('');
-
-            // Fetch updated activities
             fetchActivities();
 
             Alert.alert('Success', 'Activity updated successfully');
@@ -75,7 +72,7 @@ const App = () => {
         try {
             const response = await axios.get(`${BASE_URL}/`);
             setActivities(response.data.activities);
-            setCurrentStep('data'); // Switch to the data view
+            setCurrentStep('data'); 
         } catch (error) {
             console.error('Error fetching activities:', error);
             Alert.alert('Error', 'Failed to fetch activities');
@@ -83,7 +80,7 @@ const App = () => {
     };
 
     useEffect(() => {
-        fetchActivities(); // Fetch activities on initial load
+        fetchActivities(); 
     }, []);
 
     const addActivity = async () => {
@@ -109,7 +106,7 @@ const App = () => {
             setComments('');
 
             Alert.alert('Success', 'Activity added successfully');
-            fetchActivities(); // Fetch activities after adding a new one
+            fetchActivities(); 
         } catch (error) {
             console.error('Error adding activity:', error);
             Alert.alert('Error', 'Failed to add activity');
@@ -131,7 +128,7 @@ const App = () => {
                             <TextInput
                                 style={styles.input}
                                 placeholder="Activity Name"
-                                value={activityName || ''} // Set to an empty string if activityName is null
+                                value={activityName || ''} 
                                 onChangeText={setActivityName}
                             />
 
@@ -186,7 +183,9 @@ const App = () => {
             {currentStep === 'filters' && (
                 <View>
                     <Text style={styles.subheading}>Filter Activities</Text>
+                   
                     <View style={styles.rowContainer}>
+                        
                         <View style={styles.inputContainer}>
                             <Text style={styles.label}>Start Date (YYYY-MM-DD):</Text>
                             <TextInput
@@ -214,11 +213,13 @@ const App = () => {
 
             {currentStep === 'data' && (
                 <View>
+                    <Button title="Show Filters" onPress={() => setCurrentStep('filters')} />
+                    <Button title="Show Form" onPress={() => setCurrentStep('form')} />
                     <Text style={styles.subheading}>Activities</Text>
                     <FlatList
                         data={activities}
                         keyExtractor={(item) => item._id}
-                        numColumns={3}
+                        // numColumns={3}
                         contentContainerStyle={styles.gridContainer}
                         renderItem={({ item }) => (
                             <View style={styles.gridContainer}>
@@ -252,8 +253,7 @@ const App = () => {
                             </View>
                         )}
                     />
-                    <Button title="Show Filters" onPress={() => setCurrentStep('filters')} />
-                    <Button title="Show Form" onPress={() => setCurrentStep('form')} />
+                    
                 </View>
             )}
 
@@ -371,31 +371,28 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
 
-    // Inside your StyleSheet.create
 
-    // Inside your StyleSheet.create
-    // Inside your StyleSheet.create
     gridContainer: {
         flex: 1,
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'space-between',
-        marginHorizontal: 5, // To account for the margins of grid items
+        marginHorizontal: 5,
         gap:10,
     },
     gridItem: {
-        width: '100%', // Adjust the width as needed to fit 3 columns in a row
-        margin: 5, // Add some margin to separate grid items
+        width: '100%', 
+        margin: 5, 
         borderWidth: 1,
         borderColor: '#ccc',
         borderRadius: 5,
-        marginHorizontal: 30,
+        // marginHorizontal: 30,
         padding: 20,
     },
     gridItemImage: {
-        width: '100%', // Make the image width 100% of the grid item
-        height: 'auto', // Allow the height to adjust automatically to maintain aspect ratio
-        marginBottom: 10, // Add margin to separate the image from other content
+        width: '100%', 
+        height: 'auto',
+        // marginBottom: 10,
     },
 
 
