@@ -87,6 +87,43 @@ ScheduleRouter.post("/schedules/filter", async (req, res) => {
 
 
 
+
+ScheduleRouter.put("/schedules/:activityId", async (req, res) => {
+  const { activityId } = req.params;
+  const { progress, photoURL, comments } = req.body;
+
+  try {
+    // Find the activity by activityId
+    const activity = await Schedule.findById(activityId);
+
+    if (!activity) {
+      return res.status(404).json({ message: "Activity not found" });
+    }
+
+    // Update the activity fields
+    if (progress !== undefined) {
+      activity.progress = progress;
+    }
+
+    if (photoURL) {
+      activity.photoURL = photoURL;
+    }
+
+    if (comments) {
+      activity.commentss.push(comments);
+    }
+
+    // Save the updated activity
+    await activity.save();
+
+    res.status(200).json({ message: "Activity updated successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "An error occurred while updating the activity" });
+  }
+});
+
+
+
 module.exports = {
   ScheduleRouter
 };
