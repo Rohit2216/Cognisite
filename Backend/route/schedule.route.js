@@ -73,15 +73,15 @@ ScheduleRouter.post("/schedules/filter", async (req, res) => {
     const start = new Date(startDate).toISOString();
     const end = new Date(endDate).toISOString();
 
-    // Retrieve tasks within the specified date range
-    const filteredTasks = await Schedule.find({
+    // Retrieve schedules within the specified date range
+    const filteredSchedules = await Schedule.find({
       startDate: { $gte: start },
       endDate: { $lte: end },
     });
 
-    res.status(200).json(filteredTasks);
+    res.status(200).json(filteredSchedules);
   } catch (error) {
-    res.status(500).json({ message: "An error occurred while filtering tasks" });
+    res.status(500).json({ message: "An error occurred while filtering schedules" });
   }
 });
 
