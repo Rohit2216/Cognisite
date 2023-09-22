@@ -3,6 +3,8 @@
 
 ![Download APK] (https://drive.google.com/file/d/1oYoPe-x9_yprai0L-nhODXI5trJ8f99M/view?usp=sharing)
 
+![Backend Deployed Link](https://cognisite-lot4.onrender.com/)
+
 ## Overview
 
 This React Native app is designed to help users track the progress of work against a schedule. It allows users to specify a date range, view activities that fall within that range, update the progress of activities, attach photos, and add comments. The app stores schedule data in a database and provides a web page to view submitted data.
